@@ -22,7 +22,7 @@
 add_branches () {
 	if [ $# -eq 2 ]
 	then
-	path="$1"
+	local path="$1"
 	n="$2"
 		while [ $n -gt 0 ]
 		do
@@ -43,7 +43,7 @@ add_branches () {
 label_branches () {
 	if [ 0 == $no_path ]
 	then
-		path=$1
+		local path=$1
 		shift
 		while [ $# -gt 0 ]
 		do
