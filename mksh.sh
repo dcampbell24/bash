@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # mksh - make a new shell script.
 # Created On: 07 Februrary 2010
@@ -24,14 +24,12 @@ author="David Campbell"
 email="davekong@archlinux.us"
 
 # Allow user to either pass a script name argument or be prompted for one.
-if [ $# -eq 0 ]
-then
+if [ $# -eq 0 ]; then
 	clear
 	echo    "This is a script to ease creating a new BASH script."
 	read -p "Enter a name for your script: " "name"
 else
-	until [ ${count:=$#} -eq 0 ]
-	do
+	until [ ${count:=$#} -eq 0 ]; do
 		name+=" $1"
 		shift
 		((count--))
@@ -80,4 +78,5 @@ exit 0
 TEMPLATE
 
 chmod u+x $name
-$EDITOR $name || vi $name
+[ -z $EDITOR ] && read -p "Enter the editor you would like to use: " EDITOR
+$EDITOR $name

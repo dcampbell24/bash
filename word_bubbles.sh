@@ -5,7 +5,7 @@
 
 # Insert the location of the dictionary to use.
 # Dictionaries with common words work better (e.g. cracklib).
-dict=/usr/share/dict/cracklib-small
+dict='/usr/share/dict/cracklib-small'
 word_list="/tmp/words$RANDOM"
 
 touch "$word_list"
@@ -20,8 +20,7 @@ read -e -n 3 -p  "Enter the three letter stem: " stem
 # 4) Repeat steps 2 and 3 until the word length equals twelve.
 # 5) Add three thirteen letter plus length words.
 
-until [ ${count:=1} -eq 10 ]
-do
+until [ ${count:=1} -eq 10 ]; do
 	grep -w -m 3 "\<$stem.\{${count}\}" "$dict" >> "$word_list"
 	((count++))
 done
@@ -31,4 +30,4 @@ grep -w -m 3 "\<$stem.\{10,\}" "$dict" >> "$word_list"
 sort -u "$word_list" | sed "s/^$stem//" | tr '\n' ' '
 echo
 rm "$word_list"
-exit
+exit 0
