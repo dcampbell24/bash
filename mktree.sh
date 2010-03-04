@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # mktree.sh - create tree a diagram using tree and your filesystem.
 # Created On: 07 February 2010
@@ -20,20 +20,16 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 add_branches () {
-	if [ $# -eq 2 ]
-	then
-	local path="$1"
-	n="$2"
-		while [ $n -gt 0 ]
-		do
+	if [ $# -eq 2 ]; then
+		local path="$1"
+		n="$2"
+		while [ $n -gt 0 ]; do
 			mkdir "$name/$path/$n"
 			((n--))
 		done
-	elif [ $# -eq 1 ]
-	then
-	n="$1"
-		while [ $n -gt 0 ]
-		do
+	elif [ $# -eq 1 ]; then
+		n="$1"
+		while [ $n -gt 0 ]; do
 			mkdir "$name/$n"
 			((n--))
 		done
@@ -41,20 +37,16 @@ add_branches () {
 }
 
 label_branches () {
-	if [ 0 == $no_path ]
-	then
+	if [ 0 == $no_path ]; then
 		local path=$1
 		shift
-		while [ $# -gt 0 ]
-		do
+		while [ $# -gt 0 ]; do
 			read -p "Label $1: " new_name
 			mv -n "$name/$path/$1" "$name/$path/$new_name"
 			shift
 		done
-	elif [ 1 == $no_path ]
-	then
-		while [ $# -gt 0 ]
-		do
+	elif [ 1 == $no_path ]; then
+		while [ $# -gt 0 ]; do
 			read -p "Label $1: " new_name
 			mv -n "$name/$1" "$name/$new_name"
 			shift
@@ -69,8 +61,7 @@ mkdir $name || \
 echo -e "\nWARNING!!! You are editing a directory which already exists!\n"
 # Menu
 options="add_branches label_branches print_tree quit"
-select opt in $options
-do
+select opt in $options; do
 	case $opt in
 
 		add_branches)
