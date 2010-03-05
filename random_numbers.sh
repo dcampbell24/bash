@@ -22,6 +22,7 @@
 # Reseed RANDOM using the script's PID.
 RANDOM=$$
 
+# Generate $2 numbers with $1 digits.
 gen_num() {
 	digits=$((10**$1))
 	numbers="$2"
