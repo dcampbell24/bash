@@ -2,7 +2,7 @@
 #
 # mktree.sh - create tree a diagram using tree and your filesystem.
 # Created On: 07 February 2010
-# Last Updated: 08 February 2010
+# Last Updated: 05 March 2010
 # 
 # Copyright (C) 2010 David Campbell <davekong@archlinux.us>
 #
@@ -31,7 +31,6 @@ add_children () {
 			((children--))
 		done
 	elif [ -n "$children" ]; then
-		local branches="$1"
 		while [ $children -gt 0 ]; do
 			mkdir "$root/$children"
 			((children--))
