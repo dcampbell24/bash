@@ -22,75 +22,82 @@
 add_branches () {
 	if [ $# -eq 2 ]; then
 		local path="$1"
-		n="$2"
-		while [ $n -gt 0 ]; do
-			mkdir "$name/$path/$n"
-			((n--))
+		local branches="$2"
+		while [ $branches -gt 0 ]; do
+			mkdir "$name/$path/$branches"
+			((branches--))
 		done
 	elif [ $# -eq 1 ]; then
-		n="$1"
-		while [ $n -gt 0 ]; do
-			mkdir "$name/$n"
-			((n--))
+		local branches="$1"
+		while [ $branches -gt 0 ]; do
+			mkdir "$name/$branches"
+			((branches--))
 		done
 	fi
 }
 
 label_branches () {
-	if [ 0 == $no_path ]; then
+	if [ -n "$1" ]; then
 		local path=$1
-		shift
-		while [ $# -gt 0 ]; do
-			read -p "Label $1: " new_name
-			mv -n "$name/$path/$1" "$name/$path/$new_name"
-			shift
+		local tree=($(ls "$name/$path"))
+		for branch in $(seq 0 $((${#tree[*]} - 1))); do
+			read -p "Label ${tree[branch]}: " 'new_name'
+			mv -n "$name/$path/${tree[branch]}" "$name/$path/$new_name"
 		done
-	elif [ 1 == $no_path ]; then
-		while [ $# -gt 0 ]; do
-			read -p "Label $1: " new_name
-			mv -n "$name/$1" "$name/$new_name"
-			shift
+	else
+		local tree=($(ls "$name"))
+		for branch in $(seq 0 $((${#tree[*]} - 1))); do
+			read -p "Label ${tree[branch]}: " 'new_name'
+			mv -n "$name/${tree[branch]}" "$name/$new_name"
 		done
 	fi
 }
 
 # MAIN
 clear
-read -p "Enter the name of your tree: " name
-mkdir $name || \
-echo -e "\nWARNING!!! You are editing a directory which already exists!\n"
+read -p 'Enter the name of your tree: ' 'name'
+if [ -d "$name" ]; then
+	echo 'WARNING!!! You are editing a directory which already exists!'
+else
+	while [ -a "$name" ]; do
+		echo "mktree: cannot create tree '$name': File exists"
+		read -p 'Enter a different name: ' 'name'
+	done
+	[ -z "$name" ] && echo 'No name, no tree. Goodbye!' && exit
+	mkdir "$name" && echo "$name has been created."
+fi
+echo
+echo 'Enter a number from the list or enter nothing to print the list again.'
 # MENU
-options="add_branches label_branches print_tree quit"
+options='add_branches label_branches print_tree quit'
 select opt in $options; do
 	case $opt in
 
 		add_branches)
-		echo "Add n branches to node. [path/to/node] some_number"
-		read "input" 
-		add_branches $input
+		echo 'Enter the node to add branches to:'
+		read -p "$name/" 'node'
+		read -p 'Enter the number of branches: ' 'children'
+		add_branches "$node" "$children"
 		;;
 
 		label_branches)
-		no_path=0
-		echo "Label the branches of a node. path/to/node"
-		read "input"
-		[ -z $input ] && no_path=1
-		label_branches $input `ls $name/$input`
+		echo 'Enter a node whose children you wish to re-label:'
+		read -p "$name/" 'input'
+		label_branches "$input"
 		;;
 		
 		print_tree)
-		tree -vA --noreport $name
+		tree -vA --noreport "$name"
 		;;
 
 		quit)
-	       	echo done
+	       	echo 'Goodbye!'
 		exit
 		;;
 
 		*)
-		echo "Please enter a number from the menu."
-		echo "A blank will print the menu again."
+		echo 'Please enter a number from the menu.'
+		echo 'A blank will print the menu again.'
 		;;
 	esac
 done
-exit 0
