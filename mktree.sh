@@ -62,7 +62,7 @@ read -p 'Enter a label for the root of your tree: ' 'root'
 if [ -d "$root" ]; then
 	echo 'WARNING!!! You are editing a directory which already exists!'
 else
-	while [ -a "$root" ]; do
+	while [ -e "$root" ]; do
 		echo "mktree: cannot create tree '$root': File exists"
 		read -p 'Enter a different label: ' 'root'
 	done
