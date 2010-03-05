@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # random_numbers - generate $2 numbers with $1 digits.
 # Created On: 13 February 2010

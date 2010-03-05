@@ -42,7 +42,7 @@ name=${name// /_}
 
 # 'Here Document' creates template and saves to $name
 cat > $name <<TEMPLATE
-#!/bin/sh
+#!/bin/bash
 #
 # $name - description goes here.
 # Created On: `date "+%d %B %Y"`
