@@ -19,82 +19,67 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-add_branches () {
-	if [ $# -eq 2 ]; then
-		local path="$1"
-		local branches="$2"
-		while [ $branches -gt 0 ]; do
-			mkdir "$name/$path/$branches"
-			((branches--))
+add_children () {
+	local 'node'
+	local 'children'
+	echo 'Enter the node to add children to:'
+	read -p "$root/" 'node'
+	read -p 'Enter the number of children: ' 'children'
+	if [ -n "$node" ]; then
+		while [ $children -gt 0 ]; do
+			mkdir "$root/$node/$children"
+			((children--))
 		done
-	elif [ $# -eq 1 ]; then
+	elif [ -n "$children" ]; then
 		local branches="$1"
-		while [ $branches -gt 0 ]; do
-			mkdir "$name/$branches"
-			((branches--))
+		while [ $children -gt 0 ]; do
+			mkdir "$root/$children"
+			((children--))
 		done
 	fi
 }
 
-label_branches () {
-	if [ -n "$1" ]; then
-		local path=$1
-		local tree=($(ls "$name/$path"))
-		for branch in $(seq 0 $((${#tree[*]} - 1))); do
-			read -p "Label ${tree[branch]}: " 'new_name'
-			mv -n "$name/$path/${tree[branch]}" "$name/$path/$new_name"
+label_children () {
+	local 'node'
+	echo 'Enter a node whose children you wish to re-label:'
+	read -p "$root/" 'node'
+	if [ -n "$node" ]; then
+		local children=($(ls "$root/$node"))
+		for child in $(seq 0 $((${#children[*]} - 1))); do
+			read -p "Label ${children[child]}: " 'new_name'
+			mv -n "$root/$node/${children[child]}" "$root/$node/$new_name"
 		done
 	else
-		local tree=($(ls "$name"))
-		for branch in $(seq 0 $((${#tree[*]} - 1))); do
-			read -p "Label ${tree[branch]}: " 'new_name'
-			mv -n "$name/${tree[branch]}" "$name/$new_name"
+		local children=($(ls "$root"))
+		for child in $(seq 0 $((${#children[*]} - 1))); do
+			read -p "Label ${children[child]}: " 'new_name'
+			mv -n "$root/${children[child]}" "$root/$new_name"
 		done
 	fi
 }
-
 # MAIN
 clear
-read -p 'Enter the name of your tree: ' 'name'
-if [ -d "$name" ]; then
+read -p 'Enter a label for the root of your tree: ' 'root'
+if [ -d "$root" ]; then
 	echo 'WARNING!!! You are editing a directory which already exists!'
 else
-	while [ -a "$name" ]; do
-		echo "mktree: cannot create tree '$name': File exists"
-		read -p 'Enter a different name: ' 'name'
+	while [ -a "$root" ]; do
+		echo "mktree: cannot create tree '$root': File exists"
+		read -p 'Enter a different label: ' 'root'
 	done
-	[ -z "$name" ] && echo 'No name, no tree. Goodbye!' && exit
-	mkdir "$name" && echo "$name has been created."
+	[ -z "$root" ] && echo 'No root, no tree. Goodbye!' && exit
+	mkdir -v "$root"
 fi
 echo
 echo 'Enter a number from the list or enter nothing to print the list again.'
 # MENU
-options='add_branches label_branches print_tree quit'
+options='add_children label_children print_tree quit'
 select opt in $options; do
 	case $opt in
-
-		add_branches)
-		echo 'Enter the node to add branches to:'
-		read -p "$name/" 'node'
-		read -p 'Enter the number of branches: ' 'branches'
-		add_branches "$node" "$branches"
-		;;
-
-		label_branches)
-		echo 'Enter a node whose branches you wish to re-label:'
-		read -p "$name/" 'node'
-		label_branches "$node"
-		;;
-		
-		print_tree)
-		tree -vA --noreport "$name"
-		;;
-
-		quit)
-	       	echo 'Goodbye!'
-		exit
-		;;
-
+		add_children  ) add_children;;
+		label_children) label_children;;
+		print_tree    ) tree -vA --noreport "$root";;
+		quit          ) echo 'Goodbye!'; exit;;
 		*)
 		echo 'Please enter a number from the menu.'
 		echo 'A blank will print the menu again.'
