@@ -76,14 +76,14 @@ select opt in $options; do
 		add_branches)
 		echo 'Enter the node to add branches to:'
 		read -p "$name/" 'node'
-		read -p 'Enter the number of branches: ' 'children'
-		add_branches "$node" "$children"
+		read -p 'Enter the number of branches: ' 'branches'
+		add_branches "$node" "$branches"
 		;;
 
 		label_branches)
-		echo 'Enter a node whose children you wish to re-label:'
-		read -p "$name/" 'input'
-		label_branches "$input"
+		echo 'Enter a node whose branches you wish to re-label:'
+		read -p "$name/" 'node'
+		label_branches "$node"
 		;;
 		
 		print_tree)
