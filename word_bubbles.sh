@@ -15,7 +15,7 @@ echo             "**Word Bubbles Cheat**"
 read -e -n 3 -p  "Enter the three letter stem: " stem
 
 # 2) Search for words beginning with the given stem of length stem plus
-# count (count starts at zero) and print the first three words encountered.
+# count (count starts at one) and print the first three words encountered.
 # 3) Increment count.
 # 4) Repeat steps 2 and 3 until the word length equals twelve.
 # 5) Add three thirteen letter plus length words.
