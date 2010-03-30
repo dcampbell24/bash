@@ -1,5 +1,6 @@
 LICENSE
-=======
+-------
+
 Copyright (C) 2009, 2010 David Campbell <davekong@archlinux.us>
 
 This collection of scripts is free software: you can redistribute it and/or modify
@@ -17,7 +18,9 @@ along with this collection.  If not, see <http://www.gnu.org/licenses/>.
 
 See COPYING for the full license.
 
+
 NOTES
-=====
+-----
+
 - mktree.sh depends on tree(http://mama.indstate.edu/users/ice/tree/) to
   print_tree.
