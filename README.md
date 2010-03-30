@@ -1,7 +1,7 @@
 LICENSE
 -------
 
-Copyright (C) 2009, 2010 David Campbell <davekong@archlinux.us>
+Copyright (C) 2009, 2010 David Campbell <<davekong@archlinux.us>>
 
 This collection of scripts is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -13,14 +13,15 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License
-along with this collection.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the [GNU General Public License][0]
+along with this collection in a file named COPYING. 
 
-See COPYING for the full license.
+  [0]: http://www.gnu.org/licenses/ "The GPL"
 
 
 NOTES
 -----
 
-- mktree.sh depends on tree(http://mama.indstate.edu/users/ice/tree/) to
-  print_tree.
+- mktree.sh depends on [tree][] to print_tree.
+
+  [tree]: http://mama.indstate.edu/users/ice/tree/ "Tree Homepage"
