@@ -3,14 +3,14 @@
 # mktree.sh - create tree a diagram using tree and your filesystem.
 # Created On: 07 February 2010
 # Last Updated: 05 March 2010
-# 
+#
 # Copyright (C) 2010 David Campbell <davekong@archlinux.us>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
-#		   
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -70,7 +70,7 @@ else
 	mkdir -v "$root"
 fi
 echo
-echo 'Enter a number from the list or enter nothing to print the list again.'
+echo 'Enter a number from the list, or enter nothing to print the list again.'
 # MENU
 options='add_children label_children print_tree quit'
 select opt in $options; do
