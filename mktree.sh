@@ -1,77 +1,75 @@
-#!/bin/bash
-#
-# mktree.sh - create tree a diagram using tree and your filesystem.
-# Created On: 07 February 2010
-# Last Updated: 05 March 2010
-#
-# Copyright (C) 2010 David Campbell <davekong@archlinux.us>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#!/usr/bin/env bash
 
-add_children () {
-	local 'node'
-	local 'children'
+# Copyright (C) 2010 David Campbell <davekong@archlinux.us>
+# This program is licensed under the GPL. See COPYING for the full license.
+
+switch_node() {
+	if [[ -d "$root/$1" ]]; then
+		pushd "$root/$node" &>/dev/null
+		return 0
+	else
+		printf "Error: node %s does not exist\n" "$node"
+		return 1
+	fi
+}
+
+add_children() {
+	local 'node' 'children'
 	echo 'Enter the node to add children to:'
 	read -p "$root/" 'node'
 	read -p 'Enter the number of children: ' 'children'
-	if [ -n "$node" ]; then
-		while [ $children -gt 0 ]; do
-			mkdir "$root/$node/$children"
-			((children--))
-		done
-	elif [ -n "$children" ]; then
-		while [ $children -gt 0 ]; do
-			mkdir "$root/$children"
-			((children--))
-		done
+
+	if [[ -n "$node" ]]; then
+		switch_node "$node" || return
+	elif [[ -n "$children" ]]; then
+		pushd "$root" &>/dev/null
+	else
+		echo "No children added."
+		return
 	fi
+
+	while (( $children > 0 )); do
+		mkdir "$children"
+		((children--))
+	done
+	popd &>/dev/null
 }
 
-label_children () {
+label_children() {
 	local 'node'
 	echo 'Enter a node whose children you wish to re-label:'
 	read -p "$root/" 'node'
-	if [ -n "$node" ]; then
-		local children=($(ls "$root/$node"))
-		for child in $(seq 0 $((${#children[*]} - 1))); do
-			read -p "Label ${children[child]}: " 'new_name'
-			mv -n "$root/$node/${children[child]}" "$root/$node/$new_name"
-		done
+
+	if [[ -n "$node" ]]; then
+		switch_node "$node" || return
 	else
-		local children=($(ls "$root"))
-		for child in $(seq 0 $((${#children[*]} - 1))); do
-			read -p "Label ${children[child]}: " 'new_name'
-			mv -n "$root/${children[child]}" "$root/$new_name"
-		done
+		pushd "$root" &>/dev/null
 	fi
+
+	local children=($(echo "?*"))
+	for (( child=0; child < ${#children[@]}; child++ )); do
+		read -p "Label ${children[child]}: " 'new_name'
+		mv -Tn "${children[child]}" "$new_name"
+	done
+	popd &>/dev/null
 }
+
 # MAIN
 clear
 read -p 'Enter a label for the root of your tree: ' 'root'
-if [ -d "$root" ]; then
+if [[ -d "$root" ]]; then
 	echo 'WARNING!!! You are editing a directory which already exists!'
 else
-	while [ -e "$root" ]; do
+	while [[ -e "$root" ]]; do
 		echo "mktree: cannot create tree '$root': File exists"
 		read -p 'Enter a different label: ' 'root'
 	done
-	[ -z "$root" ] && echo 'No root, no tree. Goodbye!' && exit
-	mkdir -v "$root"
+	[[ -z "$root" ]] && echo 'No root, no tree. Goodbye!' && exit
+	mkdir "$root"
 fi
-echo
-echo 'Enter a number from the list, or enter nothing to print the list again.'
+
 # MENU
+echo -e "\nEnter a number from the list, or hit ENTER to print the list again."
 options='add_children label_children print_tree quit'
 select opt in $options; do
 	case $opt in
